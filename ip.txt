@@ -1,0 +1,6 @@
+[httpd]
+172.31.8.68  ansible_connection=ssh
+172.31.6.103 ansible_connection=ssh
+
+[haproxy]
+172.31.8.133 ansible_connection=ssh
