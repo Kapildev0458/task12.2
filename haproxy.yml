@@ -1,0 +1,40 @@
+- hosts: httpd 
+  tasks:
+  - package:
+     name: "httpd"
+     state: present
+    register: x
+  - package:
+     name: "php"
+  - copy:
+     dest: "/var/www/html/index.php"
+     src: "index.php"
+  - service:
+     name: "httpd"
+     state: restarted
+    when: x.rc == 0
+
+
+- hosts: haproxy
+  tasks:
+  - package:
+     name: "haproxy"
+     state: present
+    register: z
+  - package:
+     name: "httpd"
+     state: present
+    register: a
+  - template:
+     dest: "/etc/haproxy/haproxy.cfg"
+     src: "haproxy.cfg"
+    when: z.rc == 0
+  - service:
+     name: "haproxy"
+     state: restarted
+    when: z.rc == 0
+  - service:
+     name: "httpd"
+     state: restarted
+    when: a.rc == 0
+ 
